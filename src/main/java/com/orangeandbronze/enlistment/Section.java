@@ -6,14 +6,30 @@ import java.util.Objects;
 
 public class Section {
     private final String sectionId;
+    private final Schedule schedule;
 
-    Section(String sectionId){
+
+    Section(String sectionId, Schedule schedule){
         notBlank(sectionId);
         isTrue(isAlphanumeric(sectionId),"sectionId must be alphanumeric, was: "+sectionId);
-
-        this.sectionId=sectionId;
+        //validation for days
+        //validation for startTime
+        notNull(schedule);
+        this.sectionId = sectionId;
+        this.schedule = schedule;
     }
 
+    boolean hasConflict(Section other){
+        return this.schedule.equals(other.schedule);
+    }
+
+    void checkForConflict(Section other){
+        if(this.schedule.equals(other.schedule)){
+            throw new ScheduleConflictException("Current section "+ this
+                    + "has same schedule as new section"+ other
+                    +" at schedule "+ this);
+        }
+    }
     @Override
     public String toString(){
         return sectionId;
@@ -34,3 +50,4 @@ public class Section {
         return Objects.hash(sectionId);
     }
 }
+

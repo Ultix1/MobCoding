@@ -1,5 +1,7 @@
 package com.orangeandbronze.enlistment;
 
+import org.apache.commons.lang3.Validate;
+
 import java.util.*;
 
 public class Student {
@@ -15,11 +17,22 @@ public class Student {
         this.sections.removeIf(Objects::isNull);
     }
 
-    void enlist(Section section){
-        if(section==null){
-            throw new NullPointerException();
+    void enlist(Section newSection){
+        Validate.notNull(newSection);
+        this.sections.forEach((currSection)-> currSection.checkForConflict(newSection));
+        this.sections.add(newSection);
+    }
+
+    Collection<Section> getSections(){
+        return new ArrayList<>(sections);
+    }
+
+    Student(int studentNumber){
+        if(studentNumber < 0){
+            throw new IllegalArgumentException("studentNumber should be non-negative, was: " + studentNumber);
         }
-        this.sections.add(section);
+        this.studentNumber=studentNumber;
+        this.sections.addAll(Collections.emptyList());
     }
 
     @Override
