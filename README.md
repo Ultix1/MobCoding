@@ -1,2 +1,0 @@
-# MobCoding
-STSWENG Mob Codin
